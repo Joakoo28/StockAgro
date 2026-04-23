@@ -1,39 +1,48 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { Link } from 'react-router-dom'
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordPage({ volverLogin }) {
   const [email, setEmail] = useState('')
+  const [mensaje, setMensaje] = useState('')
 
-  const handleReset = async (e) => {
-    e.preventDefault()
+  const enviarRecuperacion = async () => {
+    setMensaje('')
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:5173/reset-password',
+    })
 
     if (error) {
-      alert(error.message)
+      setMensaje(error.message)
       return
     }
 
-    alert('Correo enviado.')
+    setMensaje('Te enviamos un correo para recuperar la contraseña.')
   }
 
   return (
-    <div className="container">
-      <h2>Recuperar contraseña</h2>
+    <div className="auth-container">
+      <div className="card">
+        <h1>🌱 StockAgro</h1>
+        <h2>Recuperar contraseña</h2>
 
-      <form onSubmit={handleReset}>
         <input
           type="email"
-          placeholder="Correo"
+          placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <button type="submit">Enviar</button>
-      </form>
+        <button onClick={enviarRecuperacion}>Enviar correo</button>
 
-      <p><Link to="/">Volver</Link></p>
+        <p className="mensaje">{mensaje}</p>
+
+        <p className="link" onClick={volverLogin}>
+          Volver al login
+        </p>
+      </div>
     </div>
   )
 }
+
+export default ForgotPasswordPage

@@ -1,57 +1,18 @@
-import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import { useNavigate } from 'react-router-dom'
-
-export default function DashboardPage() {
-  const [perfil, setPerfil] = useState(null)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const cargarPerfil = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (!user) {
-        navigate('/')
-        return
-      }
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-
-      if (error) {
-        alert(error.message)
-        return
-      }
-
-      setPerfil(data)
-    }
-
-    cargarPerfil()
-  }, [navigate])
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    navigate('/')
-  }
-
+function DashboardPage({ usuario, perfil, logout }) {
   return (
-    <div className="container">
-      <h1>Panel principal</h1>
+    <div className="dashboard-container">
+      <div className="card">
+        <h1>🌱 StockAgro</h1>
+        <h2>Panel principal</h2>
 
-      {perfil && (
-        <>
-          <p>Nombre: {perfil.nombre_completo}</p>
-          <p>Email: {perfil.email}</p>
-          <p>Rol: {perfil.rol}</p>
-        </>
-      )}
+        <p><strong>Email:</strong> {usuario.email}</p>
+        <p><strong>Nombre:</strong> {perfil?.nombre_completo || 'Sin nombre'}</p>
+        <p><strong>Rol:</strong> {perfil?.rol || 'Sin rol'}</p>
 
-      <button onClick={handleLogout}>Cerrar sesión</button>
+        <button onClick={logout}>Cerrar sesión</button>
+      </div>
     </div>
   )
 }
+
+export default DashboardPage

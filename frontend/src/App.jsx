@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import DashboardPage from './pages/DashboardPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import { supabase } from './lib/supabase'
 
 function App() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [mensaje, setMensaje] = useState('')
+  const [vista, setVista] = useState('login')
   const [usuario, setUsuario] = useState(null)
   const [perfil, setPerfil] = useState(null)
+  const [mensaje, setMensaje] = useState('')
 
   useEffect(() => {
+  const ruta = window.location.pathname
+
+  if (ruta === '/reset-password') {
+    setVista('reset')
+  } else {
     verificarSesion()
-  }, [])
+  }
+}, [])
 
   const verificarSesion = async () => {
     const {
@@ -26,19 +35,20 @@ function App() {
   const cargarPerfil = async (userId) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('*')
+      .select('id, email, nombre_completo, rol, activo')
       .eq('id', userId)
       .single()
 
     if (error) {
-      setMensaje(error.message)
+      setMensaje('Error perfil: ' + error.message)
       return
     }
 
     setPerfil(data)
+    setMensaje('')
   }
 
-  const login = async () => {
+  const login = async (email, password) => {
     setMensaje('')
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -48,62 +58,74 @@ function App() {
 
     if (error) {
       setMensaje(error.message)
-      return
+      return false
     }
 
     setUsuario(data.user)
     await cargarPerfil(data.user.id)
+    return true
+  }
+
+  const register = async (nombreCompleto, email, password) => {
+    setMensaje('')
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          nombre_completo: nombreCompleto,
+        },
+      },
+    })
+
+    if (error) {
+      setMensaje(error.message)
+      return false
+    }
+
+    setMensaje('Usuario registrado correctamente.')
+    setVista('login')
+    return true
   }
 
   const logout = async () => {
     await supabase.auth.signOut()
     setUsuario(null)
     setPerfil(null)
-    setEmail('')
-    setPassword('')
     setMensaje('')
+    setVista('login')
   }
 
   if (usuario) {
+    return <DashboardPage usuario={usuario} perfil={perfil} logout={logout} />
+  }
+
+  if (vista === 'register') {
     return (
-      <div style={{ padding: 40, fontFamily: 'Arial' }}>
-        <h1>🌱 StockAgro</h1>
-        <h2>Panel principal</h2>
+      <RegisterPage
+        register={register}
+        volverLogin={() => setVista('login')}
+        mensaje={mensaje}
+      />
+    )
+  }
 
-        <p><strong>Email:</strong> {usuario.email}</p>
-        <p><strong>Nombre:</strong> {profiles?.nombre_completo || 'Sin nombre'}</p>
-        <p><strong>Rol:</strong> {profiles?.rol || 'Sin rol'}</p>
-
-        <button onClick={logout}>Cerrar sesión</button>
-      </div>
+  if (vista === 'forgot') {
+    return (
+      <ForgotPasswordPage
+        volverLogin={() => setVista('login')}
+      />
     )
   }
 
   return (
-    <div style={{ padding: 40, fontFamily: 'Arial' }}>
-      <h1>StockAgro</h1>
-
-      <input
-        placeholder="Correo"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <br /><br />
-
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <br /><br />
-
-      <button onClick={login}>Ingresar</button>
-
-      <p>{mensaje}</p>
-    </div>
+    <LoginPage
+      login={login}
+      irARegistro={() => setVista('register')}
+      irARecuperar={() => setVista('forgot')}
+      mensaje={mensaje}
+    />
   )
 }
 
