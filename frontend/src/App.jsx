@@ -3,6 +3,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import { supabase } from './lib/supabase'
 
 function App() {
@@ -12,14 +13,14 @@ function App() {
   const [mensaje, setMensaje] = useState('')
 
   useEffect(() => {
-  const ruta = window.location.pathname
+    const ruta = window.location.pathname
 
-  if (ruta === '/reset-password') {
-    setVista('reset')
-  } else {
-    verificarSesion()
-  }
-}, [])
+    if (ruta === '/reset-password') {
+      setVista('reset')
+    } else {
+      verificarSesion()
+    }
+  }, [])
 
   const verificarSesion = async () => {
     const {
@@ -95,6 +96,14 @@ function App() {
     setPerfil(null)
     setMensaje('')
     setVista('login')
+  }
+
+  if (vista === 'reset') {
+    return (
+      <ResetPasswordPage
+        volverLogin={() => setVista('login')}
+      />
+    )
   }
 
   if (usuario) {

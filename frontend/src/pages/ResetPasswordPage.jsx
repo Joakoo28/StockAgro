@@ -1,10 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 function ResetPasswordPage({ volverLogin }) {
   const [password, setPassword] = useState('')
   const [confirmacion, setConfirmacion] = useState('')
   const [mensaje, setMensaje] = useState('')
+
+  useEffect(() => {
+    procesarRecovery()
+  }, [])
+
+  const procesarRecovery = async () => {
+    const hash = window.location.hash
+
+    if (!hash) return
+
+    const params = new URLSearchParams(hash.substring(1))
+
+    const access_token = params.get('access_token')
+    const refresh_token = params.get('refresh_token')
+
+    if (!access_token || !refresh_token) return
+
+    const { error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token,
+    })
+
+    if (error) {
+      setMensaje(error.message)
+    }
+  }
 
   const cambiarPassword = async () => {
     setMensaje('')
@@ -46,7 +72,9 @@ function ResetPasswordPage({ volverLogin }) {
           onChange={(e) => setConfirmacion(e.target.value)}
         />
 
-        <button onClick={cambiarPassword}>Guardar contraseña</button>
+        <button onClick={cambiarPassword}>
+          Guardar contraseña
+        </button>
 
         <p className="mensaje">{mensaje}</p>
 
