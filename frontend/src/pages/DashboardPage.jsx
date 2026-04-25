@@ -35,25 +35,25 @@ function DashboardPage({ usuario, perfil, logout }) {
         <section className="cards-grid">
           <div className="stat-card">
             <h3>Lotes activos</h3>
-            <p>8</p>
+            <p>0</p>
             <span>Superficie total registrada</span>
           </div>
 
           <div className="stat-card">
             <h3>Cultivos en campaña</h3>
-            <p>4</p>
-            <span>Soja, maíz, trigo y pastura</span>
+            <p>0</p>
+            <span>empty</span>
           </div>
 
           <div className="stat-card warning">
             <h3>Stock bajo</h3>
-            <p>3</p>
+            <p>0</p>
             <span>Insumos requieren reposición</span>
           </div>
 
           <div className="stat-card">
             <h3>Tareas pendientes</h3>
-            <p>6</p>
+            <p>0</p>
             <span>Actividades programadas</span>
           </div>
         </section>
@@ -84,24 +84,6 @@ function DashboardPage({ usuario, perfil, logout }) {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Fumigación</td>
-                  <td>Lote 1</td>
-                  <td><span className="badge pending">Pendiente</span></td>
-                  <td>22/04/2026</td>
-                </tr>
-                <tr>
-                  <td>Siembra</td>
-                  <td>Lote 3</td>
-                  <td><span className="badge done">Realizada</span></td>
-                  <td>20/04/2026</td>
-                </tr>
-                <tr>
-                  <td>Fertilización</td>
-                  <td>Lote 2</td>
-                  <td><span className="badge pending">Pendiente</span></td>
-                  <td>25/04/2026</td>
-                </tr>
               </tbody>
             </table>
           </div>
