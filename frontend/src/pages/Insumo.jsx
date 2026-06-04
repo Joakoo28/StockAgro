@@ -159,12 +159,15 @@ function Insumo({ volverDashboard }) {
             onChange={(e) => setForm({ ...form, nombre: e.target.value })}
           />
 
-          <input
-            type="text"
-            placeholder="Tipo"
-            value={form.tipo}
-            onChange={(e) => setForm({ ...form, tipo: e.target.value })}
-          />
+          <select
+              value={form.tipo}
+              onChange={(e) => setForm({ ...form, tipo: e.target.value })}
+            >
+              <option value="">Seleccione un tipo</option>
+              <option value="Liquido">Líquido</option>
+              <option value="Fertilizante">Fertilizante</option>
+              <option value="Semilla">Semilla</option>
+           </select>
 
           <input
             type="number"
@@ -222,19 +225,19 @@ function Insumo({ volverDashboard }) {
                       <span className="badge done">Disponible</span>
                     )}
                   </td>
-                  <td>
-                    <button
-                      className="table-btn"
-                      onClick={() => editarInsumo(insumo)}
-                    >
-                      Editar
+                  <td className="acciones">
+                   <button
+                         className="table-btn"
+                         onClick={() => editarInsumo(insumo)}
+                        >
+                         ✏️ Editar
                     </button>
 
                     <button
                       className="table-btn danger"
                       onClick={() => eliminarInsumo(insumo.id_insumo)}
                     >
-                      Eliminar
+                      🗑️ Eliminar
                     </button>
                   </td>
                 </tr>

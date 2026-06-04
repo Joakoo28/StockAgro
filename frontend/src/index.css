@@ -240,3 +240,79 @@ th {
   background: #d1e7dd;
   color: #0f5132;
 }
+.module-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+}
+
+.panel button {
+  margin-top: 10px;
+}
+
+.secondary-btn {
+  background: #6c757d;
+  margin-top: 12px;
+}
+
+.secondary-btn:hover {
+  background: #5c636a;
+}
+
+.acciones {
+  white-space: nowrap;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.table-btn {
+  width: auto !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px;
+  margin: 0;
+
+  border: none;
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  background: #16803a;
+  color: white;
+}
+
+.table-btn:hover {
+  background: #126c31;
+}
+
+.table-btn.danger {
+  background: #d62828;
+}
+
+.table-btn.danger:hover {
+  background: #b91c1c;
+}
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  box-sizing: border-box;
+
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+
+  background: white;
+}select {
+  cursor: pointer;
+}
