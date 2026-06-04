@@ -5,12 +5,14 @@ import DashboardPage from './pages/DashboardPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import { supabase } from './lib/supabase'
+import Insumo from './pages/Insumo'
 
 function App() {
   const [vista, setVista] = useState('login')
   const [usuario, setUsuario] = useState(null)
   const [perfil, setPerfil] = useState(null)
   const [mensaje, setMensaje] = useState('')
+  const [vistaSistema, setVistaSistema] = useState('dashboard')
 
   useEffect(() => {
     const ruta = window.location.pathname
@@ -107,8 +109,23 @@ function App() {
   }
 
   if (usuario) {
-    return <DashboardPage usuario={usuario} perfil={perfil} logout={logout} />
+  if (vistaSistema === 'insumos') {
+    return (
+      <Insumo
+        volverDashboard={() => setVistaSistema('dashboard')}
+      />
+    )
   }
+
+  return (
+    <DashboardPage
+      usuario={usuario}
+      perfil={perfil}
+      logout={logout}
+      abrirInsumos={() => setVistaSistema('insumos')}
+    />
+  )
+}
 
   if (vista === 'register') {
     return (

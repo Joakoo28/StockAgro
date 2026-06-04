@@ -1,17 +1,19 @@
-function DashboardPage({ usuario, perfil, logout }) {
+function DashboardPage({ usuario, perfil, logout, abrirInsumos }) {
   return (
     <div className="dashboard-layout">
       <aside className="sidebar">
         <h2>🌱 StockAgro</h2>
 
         <nav>
-          <button className="menu-item active">Panel principal</button>
-          <button className="menu-item">Lotes</button>
-          <button className="menu-item">Cultivos</button>
-          <button className="menu-item">Insumos</button>
-          <button className="menu-item">Tareas</button>
-          <button className="menu-item">Cosechas</button>
-          <button className="menu-item">Reportes</button>
+          <button className="menu-item active">🏠 Panel principal</button>
+          <button className="menu-item">🌾 Lotes</button>
+          <button className="menu-item">🌱 Cultivos</button>
+          <button className="menu-item" onClick={abrirInsumos}>
+            📦Insumos
+          </button>
+          <button className="menu-item">📋 Tareas</button>
+          <button className="menu-item">🚜 Cosechas</button>
+          <button className="menu-item">📈 Reportes</button>
         </nav>
 
         <button className="logout-btn" onClick={logout}>
@@ -70,7 +72,7 @@ function DashboardPage({ usuario, perfil, logout }) {
             </div>
           </div>
 
-          <div className="panel">
+          <div className="panel"> 
             <h2>Últimas tareas</h2>
 
             <table>
